@@ -51,8 +51,8 @@ function GetPage({posted}) {
     const disableBtn = <div className={cl.button}><Button width={"120px"} disabled>Show more</Button></div>
   
     return ( 
-        <section className={cl.get} id={'get'}>
-            <h2 className={cl.title}>Working with GET request</h2>
+        <section className={cl.get}>
+            <h2 className={cl.title} id={'get'}>Working with GET request</h2>
             <div className={cl.list}>{useDisplay(<CardList items={sortedUsers}/>, isUsersLoading, errorUsers)}</div> 
             { useDisplay(btn, isNewUsersLoading, errorNewUsers, disableBtn)}
         </section>

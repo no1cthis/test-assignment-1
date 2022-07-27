@@ -158,8 +158,8 @@ function PostsPage({setPosted, posted}) {
                         </form>
 
     return ( 
-        <section className={cl.post} id='post'>
-            <h2 className={cl.title}>{posted ? postedMessage : "Working with POST request"}</h2>
+        <section className={cl.post} >
+            <h2 className={cl.title} id='post'>{posted ? postedMessage : "Working with POST request"}</h2>
             {
             posted    
                     ?   <img className={cl.success} src={successImg} alt='User registered image'/>
