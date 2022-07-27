@@ -1,0 +1,13 @@
+@import '../../../scss/var.scss';
+
+.loader{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    animation: loading 0.8s linear infinite;
+}
+
+@keyframes loading{
+    from{ transform: rotate(0deg);}
+    to{ transform: rotate(360deg);}
+}

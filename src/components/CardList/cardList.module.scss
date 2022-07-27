@@ -1,0 +1,23 @@
+@import '../../scss/var.scss';
+
+.cards__wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 29px;
+    column-gap: 29px;
+}
+
+@media (max-width: 904px) {
+    .cards__wrapper{
+        grid-template-columns: 1fr 1fr;
+        column-gap: 16px;
+        row-gap: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .cards__wrapper{
+        display: flex;
+        flex-direction: column;
+    }
+}

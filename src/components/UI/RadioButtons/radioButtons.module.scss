@@ -1,0 +1,44 @@
+@import '../../../scss/var.scss';
+
+.radioButtons{
+    @include Text-font;
+    width: calc(100% - 3px);
+    display: flex;
+    flex-direction: column;
+}
+
+.radio{
+    margin-bottom: 2.5px;
+    &:last-child{
+        margin-bottom: 0;
+    }
+}
+.radio__button{
+    opacity: 0;
+    &:checked {
+        + .radio__text {
+          &:before {
+            background-color: $secondary-color;
+            box-shadow: inset 0 0 0 5px $background-color;
+          }
+        }
+      }
+}
+.radio__text {
+    cursor: pointer;
+    &:before {
+      content: '';
+      left: -11px;
+      top: 50%;
+      transform: translateY(25%);
+      border-radius: 100%;
+      border: 1px solid $secondary-color;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      position: relative;
+      cursor: pointer;
+      transition:  250ms ;
+    }
+  }
+ 

@@ -1,0 +1,20 @@
+@import '../../scss/var.scss';
+
+.title{
+    @include Heading-font;
+    margin-top: 140px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.list{
+    margin-top: 50px;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}

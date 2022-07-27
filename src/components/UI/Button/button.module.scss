@@ -1,0 +1,28 @@
+@import '../../../scss/var.scss';
+
+
+.btn{
+    @include Text-font;
+    min-width: 100px;
+    min-height: 34px;
+    text-align: center;
+    background-color: $primary-color;
+    border: 0px;
+    border-radius: 80px;
+    color: $black-color;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover{
+        background-color: $button-hover-color;
+    }
+    &__disabled{
+        @include Text-font;
+        min-width: 100px;
+        min-height: 34px;
+        background-color: $button-disabled-color;
+        border: 0px;
+        border-radius: 80px;
+        color: $white-color;
+        cursor: pointer;  
+    }
+}

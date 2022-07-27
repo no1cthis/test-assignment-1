@@ -1,0 +1,11 @@
+.photo{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    // object-fit: cover;
+    img{
+        height: 100%;
+        width: 100%;
+    }
+}

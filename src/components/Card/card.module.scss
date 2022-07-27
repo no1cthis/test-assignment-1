@@ -1,0 +1,66 @@
+@import '../../scss/var.scss';
+
+.card{
+    @include Text-font;
+    width: 370px;
+    height: 254px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.container{
+    width: calc(100% - 40px);
+    margin: 0 auto;
+}
+
+.photo{
+    display: flex;
+    margin: 20px 0;
+    justify-content: center;
+}
+.details{
+    .text:first-child{
+        margin-bottom: 20px;
+    }
+}
+.text{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+}
+
+.tip{
+    @include Text-font;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    padding: 3px 16px;
+    border-radius: 4px;
+    background-color: $black-color;
+    color: $white-color;
+}
+
+@media (max-width: 1024px) {
+    .card{
+        width: 282px;
+    }
+}
+@media (max-width: 904px) {
+    .card{
+        width: 344px;
+    }
+}
+@media (max-width: 767px) {
+    .card{
+        width: 100%;
+    }
+}
+@media (max-width: 600px) {
+    .card{
+        width: 328px;
+        margin: 0 auto 3.4px;
+    }
+}

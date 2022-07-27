@@ -1,0 +1,50 @@
+@import '../../../scss/var.scss';
+@import '../../../scss/border.scss';
+
+.upload{
+    @include Text-font;
+    height: 54px;
+    display: flex;
+    
+    
+    &__button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $background-color;
+        width: calc(83px - 15px *2);
+        
+        padding: 0 15px;
+
+        border: 1px solid $black-color;
+        border-radius: 4px 0px 0px 4px;
+        
+        cursor: pointer;
+
+        z-index: 10;
+    }
+
+    &__file{
+        @include border;
+        width: 300px;
+        margin-left: -3px;
+        border-left: none;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: $helper-text-color;  
+        
+        span{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.error{
+    color: $error-color;
+}
+
+
+
