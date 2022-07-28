@@ -18,6 +18,7 @@ function GetPage({posted}) {
     const [fetchingUsersInit, isUsersLoading, errorUsers] = useIsLoading(async (count=6)=>{
         const response = (await ServerService.getUsersByPage(1, count))
         setUsers(response.users)
+        page.current = 2;
         totalPages.current = response.total_pages;
     })
 
