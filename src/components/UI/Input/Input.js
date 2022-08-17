@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import cl from './input.module.scss'
 
-function Input({placeholder, helperText, errorText, error, value, handleChange, id, pattern}) {
+function Input(props) {
+
+    const {placeholder, helperText, errorText, values, name, setValues, ...inputProps} = props
     const [dirty, setDirty] = useState(false);
 
-    let helperTextElement = helperText 
-    ? (<div className={cl['input__helper-text']}>{helperText}</div>)
-    : null
+    const err = !props.patternJS.test(values[name]) && dirty
 
-    if(error && errorText)
-        helperTextElement = (<div className={`${cl['input__helper-text']} ${cl.error}`}>
-                                {error && dirty && !pattern.test(value) ? errorText : helperText}
-                            </div>) 
+    let helperTextElement = err
+    ?   (<div className={`${cl['input__helper-text']} ${cl.error}`}>{errorText}</div>)
+    :   (<div className={cl['input__helper-text']}>{helperText}</div>)
     
-
-
     return ( 
         <div className={cl.wrapper}>
             <input 
             type="text" 
             className={cl.input}  
             placeholder={placeholder} 
-            style={{borderColor: error ? "#CB3D40" : null}}
-            value={value}
-            id={id}
-            onChange={handleChange}
+            style={{borderColor: err ? "#CB3D40" : null}}
+            value={values[name]}
+            onChange={e => setValues({...values, [name]:e.target.value  })}
             onBlur={()=>setDirty(true)}
+            {...inputProps}
             />
-            <div className={`${cl.input__filled} ${error ? cl.error : null}`} style={{opacity: value ? 1 : 0}}>{placeholder}</div>
+            <div className={`${cl.input__filled} ${err ? cl.error : null}`} style={{opacity: values[name] ? 1 : 0}}>{placeholder}</div>
             {helperTextElement}
         </div>
-        
      );
 }
 

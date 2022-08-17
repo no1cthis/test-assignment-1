@@ -1,68 +1,89 @@
 import React, { useEffect, useState } from 'react';
 import { useDisplay, useIsLoading } from '../../hooks/useIsLoading';
-import {useFormik} from 'formik'
 import ServerService from '../../Service/ServerService';
 
 
 
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input'
-import RadioButtons from '../UI/RadioButtons/RadioButtons';
 import Upload from '../UI/Upload/Upload'
 
 import cl from './postPage.module.scss'
 import successImg from '../../resources/img/success-image.png'
 
 function PostsPage({setPosted, posted}) {
-    const nameCheck = /^.{2,60}$/
-    const emailCheck = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
-    const phoneCheck = /^[\+]{0,1}380([0-9]{9})$/
+    const nameCheck = "^.{2,60}$"
+    const emailCheck = '^(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$';
+    const phoneCheck = "^[\+]{0,1}380([0-9]{9})$"
 
-    const [positions, setPositions] = useState([])
-    const [errors, setErrors] = useState(['error'])
+    const [errors, setErrors] = useState([])
+    const [errorPost, setErrorPost] = useState('')
     const [postedMessage, setPostedMessage] = useState('')
+    const [values, setValues] = useState({
+        name:   '',
+        email:  '',
+        phone:  '',
+    })
+
+    const inputs =[
+        {
+            name:           'name',
+            type:           'text',
+            placeholder:    'Your name',
+            errorText:      '2-60 character',
+            required:       true,
+            pattern:        nameCheck,
+            patternJS:      /^.{2,60}$/,
+        },
+        {
+            name:           'email',
+            type:           'email',
+            placeholder:    'Email',
+            errorText:      "Not valid email. Check if it's correct",
+            required:       true,
+            pattern:        emailCheck,
+            patternJS:      /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/,
+        },
+        {
+            name:           'phone',
+            type:           'text',
+            placeholder:    'Phone',
+            helperText:     '+38 (XXX) XXX - XX - XX',
+            errorText:      "Not correct number. Example: +38 (XXX) XXX - XX - XX",
+            required:       true,
+            pattern:        phoneCheck,
+            patternJS:      /^[\+]{0,1}380([0-9]{9})$/,
+        },
+    ]
     
     
     const [postUser, isPostingLoading] = useIsLoading(async ()=>{
+        ServerService.post(values)
         const response = await(ServerService.post(values))
-        if(response.success)
-            setPosted(response.success);
-        setPostedMessage( response.message)
-    })
-
-    const {handleSubmit, handleChange, values} = useFormik({
-        initialValues:{
-            name:           '',
-            email:          '',
-            phone:          '',
-            position_id:    '',
-            photo:          '',
-            id:             '',
-        },
-        onSubmit: (values) =>{
-            new Promise((resolve) => {
-                let info = Object.entries(values)
-                info = info.filter(item => item[1] == '' && item[0] != 'id').map(item => item[0])
-                if(!emailCheck.test(values.email) && values.email != '')
-                    info = [...info, 'email']
-                if(!phoneCheck.test(values.phone) && values.phone != '')
-                    info = [...info, 'phone']
-                if(!nameCheck.test(values.name) && values.name != '')
-                    info = [...info, 'name']
-                 setErrors(info)
-                 resolve(info)
-            })
-            .then(info =>{
-                if(info.length == 0){
-                    values.id = new Date().getTime()
-                    postUser()
-                }
-            })
-            
-
-            
+        console.log(response)
+        if(response.status < 300)
+        {
+            setPostedMessage('User has been registered')
+            setErrorPost('')
+            setPosted(true);
+        }
+        else{
+            setErrorPost(`Error: ${response.status}`)
         }
     })
+
+    function SignUp(){
+        inputs.forEach(input =>{
+            if(!input.patternJS.test(values[input.name]))
+                return
+        })
+        if(!values.photo)
+        {
+            setErrors('photo')
+            return;
+        }
+        postUser();
+    }
 
     useEffect(()=>{
        if(!posted)
@@ -74,69 +95,20 @@ function PostsPage({setPosted, posted}) {
         }, 1000)
     },[posted])
     
-    const handleRadioButtons = (e)      => values.position_id = e.target.value
     const handleUpload       = (file)   => values.photo = file
+
     
-
-    const [fetchingPositions, isPositionLoading, errorPosition] = useIsLoading(async ()=>{
-        const response = (await ServerService.getPostitons())
-        setPositions(response)
-    })
-
-    useEffect(() =>{
-        fetchingPositions();
-    }, [])
-
-    const isErrorPosting = () =>{
-        return !(posted || postedMessage == 'Working with POST request')
-    }
-    
-    const radioButtons = <div className={cl.radio__buttons}><RadioButtons handleChange={handleRadioButtons} items = {positions}/></div>
-
-    const formElement = <form className={cl.form} onSubmit={handleSubmit}>
-                            <div className={cl.input}>
+    const formElement = <form className={cl.form} onSubmit={SignUp}>
+                            {inputs.map(input =>{
+                           return( <div className={cl.input}>
                                         <Input 
-                                        handleChange={handleChange} 
-                                        value = {values.name} 
-                                        id='name'  
-                                        placeholder="Your name" 
-                                        errorText= {errors.includes('name') ? 'Should be 2-60 characters' : null}
-                                        error = {errors.includes('name') ? true : false}
-                                        pattern = {nameCheck}
+                                        key                 = {input.name}
+                                        values              = {values}
+                                        setValues           = {setValues}
+                                        {...input}
                                         />
-                            </div>
-                            <div className={cl.input}>
-                                        <Input 
-                                        handleChange={handleChange} 
-                                        value = {values.email} 
-                                        id='email' 
-                                        placeholder="Email"
-                                        error = {errors.includes('email') ? true : false}
-                                        errorText= {errors.includes('email') ? 'Not valid Email' : null}
-                                        pattern = {emailCheck}
-                                        />
-                            </div>
-                            <div className={cl.input}>
-                                        <Input 
-                                        handleChange={handleChange} 
-                                        value = {values.phone} 
-                                        id='phone' 
-                                        placeholder="Phone" 
-                                        errorText= {errors.includes('phone') ? 'Not valid number' : null}
-                                        helperText='+38 (XXX) XXX - XX - XX'
-                                        error = {errors.includes('phone') ? true : false}
-                                        pattern = {phoneCheck}
-                                        />
-                            </div>
-
-                            <div 
-                            className={cl.radio__title} 
-                            style={{color: errors.includes('position_id') ? "#CB3D40" : null}}
-                            >
-                                Select your position
-                            </div>
-
-                            {useDisplay(radioButtons, isPositionLoading, errorPosition)}
+                                    </div>  )   
+                            })} 
 
                             <div className={cl.upload}>
                                     <Upload 
@@ -151,15 +123,15 @@ function PostsPage({setPosted, posted}) {
 
                             <div 
                             className={cl['error-message']} 
-                            style={{marginBottom: isErrorPosting() ? 'calc(100px - 26px)' : '100px'}}
+                            style={{marginBottom: errorPost ? 'calc(100px - 26px)' : '100px'}}
                             >
-                                {isErrorPosting() ? postedMessage : null}
+                                {errorPost ? errorPost : null}
                             </div>
                         </form>
 
     return ( 
         <section className={cl.post} >
-            <h2 className={cl.title} id='post'>{posted ? postedMessage : "Working with POST request"}</h2>
+            <h2 className={cl.title} id='post'>{posted ? postedMessage : "Working with VALIDATION"}</h2>
             {
             posted    
                     ?   <img className={cl.success} src={successImg} alt='User registered image'/>

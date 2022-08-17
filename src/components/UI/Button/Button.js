@@ -7,7 +7,7 @@ function Button({children, disabled, width, anchor, type='button'}) {
     return ( 
         <a href={anchor ? anchor : null}>
         <input 
-        tabindex= {anchor ? "-1" : 0}
+        tabIndex= {anchor ? "-1" : 0}
         type={type}  
         className={disabled ? cl.btn__disabled : cl.btn} 
         value={children} 

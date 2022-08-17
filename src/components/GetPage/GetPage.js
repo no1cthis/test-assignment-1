@@ -16,19 +16,31 @@ function GetPage({posted}) {
     let totalPages = useRef(3)
 
     const [fetchingUsersInit, isUsersLoading, errorUsers] = useIsLoading(async (count=6)=>{
-        const response = (await ServerService.getUsersByPage(1, count))
-        setUsers(response.users)
+        let users = (await ServerService.getUsersByPage(1, count))
         page.current = 2;
-        totalPages.current = response.total_pages;
+        totalPages.current = Math.ceil(users.headers['x-total-count']/count);
+
+        users = users.data;
+        const photos = (await ServerService.getPhotos(1, count))
+        for(let i=0; i<users.length; i++){
+            users[i].photo = photos.data[i].thumbnailUrl
+        }
+        const result = []
+        setUsers(users)
     })
 
     const [fetchingNewUsers, isNewUsersLoading, errorNewUsers] = useIsLoading(async (count=6)=>{
-        const response = await ServerService.getUsersByPage(page.current, count)
-        totalPages.current = response.total_pages 
-        if(page.current >= response.total_pages+1)
+        let response = await ServerService.getUsersByPage(page.current, count)
+        totalPages.current = Math.ceil(response.headers['x-total-count']/count);
+        if(page.current >= totalPages+1)
         return
+        response = response.data
+        const photos = (await ServerService.getPhotos(1, count))
+        for(let i=0; i<response.length; i++){
+            response[i].photo = photos.data[i].thumbnailUrl
+        }
         page.current = page.current + 1
-        setUsers( [...users, ...response.users])
+        setUsers( [...users, ...response])
     })
 
     useEffect(()=>{

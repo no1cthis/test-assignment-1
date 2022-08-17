@@ -5,6 +5,7 @@
     @include Text-font;
     height: 54px;
     display: flex;
+    justify-content: center;
     
     
     &__button{
@@ -12,7 +13,7 @@
         align-items: center;
         justify-content: center;
         background-color: $background-color;
-        width: calc(83px - 15px *2);
+        width: calc(113px - 15px *2);
         
         padding: 0 15px;
 
@@ -26,7 +27,7 @@
 
     &__file{
         @include border;
-        width: 300px;
+        width: 270px;
         margin-left: -3px;
         border-left: none;
         display: flex;

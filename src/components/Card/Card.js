@@ -6,7 +6,7 @@ import Photo from '../UI/Photo/Photo';
 import image from '../../resources/img/photo-cover.jpg'
 import cl from './card.module.scss'
 
-function Card({photo=image, name='no name', position = 'no position', email = 'no email', phone = 'no phone'}) {
+function Card({photo=image, name='no name', username = 'no username', email = 'no email', phone = 'no phone'}) {
 
     const clipboard = useClipboard()
 
@@ -38,7 +38,7 @@ function Card({photo=image, name='no name', position = 'no position', email = 'n
              </div>
              <div className={cl.details}>
                 <div className={cl.text} onMouseMove={e => isEllipsisActive(e, name)} onMouseLeave={() => setTip(null)} onClick = {(e) => Copy(name, e)}>{name}</div>
-                <div className={cl.text} onMouseMove={e => isEllipsisActive(e, position)} onMouseLeave={() => setTip(null)} onClick = {(e) => Copy(position, e)}>{position}</div>
+                <div className={cl.text} onMouseMove={e => isEllipsisActive(e, username)} onMouseLeave={() => setTip(null)} onClick = {(e) => Copy(username, e)}>{username}</div>
                 <div className={cl.text} onMouseMove={e => isEllipsisActive(e, email)} onMouseLeave={() => setTip(null)} onClick = {(e) => Copy(email, e)}>{email}</div>
                 <div className={cl.text} onMouseMove={e => isEllipsisActive(e, phone)} onMouseLeave={() => setTip(null)} onClick = {(e) => Copy(phone, e)}>{phone}</div>
              </div>

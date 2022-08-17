@@ -6,11 +6,11 @@ import GetPage from '../GetPage/GetPage';
 import WelcomePage from '../WelcomePage/WelcomePage';
 import PostsPage from '../PostPage/PostPage';
 
-import './app.scss'
+import './App.scss'
 
 
 
-function App() {
+function TestCompany1() {
 const [posted, setPosted] = useState(false)
 
   const isPosted = (bool) =>{
@@ -30,4 +30,4 @@ const [posted, setPosted] = useState(false)
   );
 }
 
-export default App;
+export default TestCompany1;
